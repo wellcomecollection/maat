@@ -11,6 +11,7 @@ export type TestCase = {
 }
 
 export type Test = {
+  id: string
   label: string
   description: string
   pass: PassFn

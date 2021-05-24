@@ -60,6 +60,7 @@ export function rankEvalRequest(
 }
 
 export type TestResult = {
+  id: string
   label: string
   description: string
   pass: boolean
@@ -81,6 +82,7 @@ export function runTests(
         result: test.pass(detail),
       }))
       return {
+        id: test.id,
         label: test.label,
         description: test.description,
         namespace: template.namespace,

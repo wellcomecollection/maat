@@ -50,7 +50,7 @@ type RankEvalStatusProps = {
 const RankEvalStatus: FunctionComponent<RankEvalStatusProps> = ({ pass }) => {
   return (
     <div
-      className={`w-5 h-5 mr-2 rounded-full bg-${pass ? 'green' : 'red'}-200`}
+      className={`w-5 h-5 mr-2 rounded-full bg-${pass ? 'green' : 'red'}-400`}
     >
       <span className="sr-only">{pass ? 'pass' : 'fail'}</span>
     </div>
@@ -107,54 +107,48 @@ type ResultProps = {
   result: SearchApiResponse['results'][number]
 }
 const Result: FunctionComponent<ResultProps> = ({ result, search }) => {
-  const [showRankEval, setShowRankEval] = useState(true)
-
   return (
-    <div className="mt-5">
-      <button
-        type="button"
-        className={`flex flex-auto items-center mr-2 mb-2 p-2 bg-indigo-${
-          showRankEval ? '100' : '200'
-        } rounded-full`}
-        onClick={() => setShowRankEval(!showRankEval)}
+    <div className="p-1 mt-5 bg-purple-100">
+      <div
+        id={result.id}
+        className={`text-lg flex flex-auto items-center mr-2 mb-2 p-2`}
       >
         <RankEvalStatus pass={result.pass} />
         {result.label}
-      </button>
-      {showRankEval && (
-        <div className="flex flex-wrap">
-          {Object.entries(result.results).map(
-            (
-              [
-                key,
-                {
-                  query,
-                  result: { pass },
-                },
-              ],
-              i
-            ) => (
-              <Link
-                href={{
-                  pathname: '/search',
-                  query: JSON.parse(
-                    JSON.stringify({
-                      query,
-                      rankId: search.rankId,
-                    })
-                  ),
-                }}
-                key={i}
-              >
-                <a className="flex flex-auto items-center mr-2 mb-2 p-2 bg-indigo-200 rounded-full">
-                  <RankEvalStatus pass={pass} />
-                  <div>{query}</div>
-                </a>
-              </Link>
-            )
-          )}
-        </div>
-      )}
+      </div>
+
+      <div className="flex flex-wrap">
+        {Object.entries(result.results).map(
+          (
+            [
+              ,
+              {
+                query,
+                result: { pass },
+              },
+            ],
+            i
+          ) => (
+            <Link
+              href={{
+                pathname: '/search',
+                query: JSON.parse(
+                  JSON.stringify({
+                    query,
+                    rankId: search.rankId,
+                  })
+                ),
+              }}
+              key={i}
+            >
+              <a className="flex flex-auto items-center mr-2 mb-2 p-2 bg-purple-200 rounded-full">
+                <RankEvalStatus pass={pass} />
+                <div>{query}</div>
+              </a>
+            </Link>
+          )
+        )}
+      </div>
     </div>
   )
 }
@@ -164,11 +158,12 @@ const Search: NextPage<Props> = ({ data, search }) => {
     <>
       <QueryForm query={search.query} rankId={search.rankId} />
 
-      <h1 className="text-4xl font-bold">Tests</h1>
       {data.results.map((result, i) => (
         <Result key={i} result={result} search={search} />
       ))}
-      <h1 className="text-4xl font-bold">Hits</h1>
+      {data.hits.hits.length > 1 && (
+        <h1 className="text-4xl font-bold">Results</h1>
+      )}
       <ul>
         {data.hits.hits.map((hit) => (
           <li key={hit._id}>

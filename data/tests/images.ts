@@ -3,6 +3,7 @@ import { eq1 } from './pass'
 
 const tests: Test[] = [
   {
+    id: 'precision',
     label: 'Precision',
     description: 'TBD',
     pass: eq1,
@@ -20,6 +21,7 @@ const tests: Test[] = [
     },
   },
   {
+    id: 'recall',
     label: 'Recall',
     description: 'TBD',
     pass: eq1,
@@ -81,7 +83,8 @@ const tests: Test[] = [
     },
   },
   {
-    label: 'Languages',
+    id: 'alternative-spellings',
+    label: 'Alternative spellings',
     description: 'TBD',
     pass: eq1,
     cases: [
