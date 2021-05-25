@@ -1,5 +1,8 @@
-// eslint-disable-next-line camelcase
-import { standard_with_slashes_analyzer } from './analyzers'
+/* eslint-disable camelcase */
+import {
+  standard_with_slashes_analyzer,
+  with_slashes_char_filter,
+} from './analyzers'
 import { asciifoldedFields, multilingualFields, shinglesFields } from './common'
 
 export default {
@@ -32,7 +35,7 @@ export default {
         dynamic: 'false',
         properties: {
           alternativeTitles: {
-            copy_to: 'search.titlesAndContributors',
+            copy_to: ['search.titlesAndContributors'],
             type: 'text',
             fields: {
               arabic: {
@@ -80,6 +83,7 @@ export default {
                 analyzer: 'standard',
               },
               label: {
+                copy_to: ['search.textWithSlashes'],
                 type: 'text',
                 fields: {
                   keyword: {
@@ -99,7 +103,10 @@ export default {
                     type: 'keyword',
                   },
                 },
-                copy_to: ['data.collectionPath.depth'],
+                copy_to: [
+                  'data.collectionPath.depth',
+                  'search.textWithSlashes',
+                ],
                 analyzer: 'path_hierarchy_analyzer',
               },
             },
@@ -109,7 +116,7 @@ export default {
               agent: {
                 properties: {
                   label: {
-                    copy_to: 'search.titlesAndContributors',
+                    copy_to: ['search.titlesAndContributors'],
                     type: 'text',
                     fields: {
                       keyword: {
@@ -481,7 +488,7 @@ export default {
             },
           },
           title: {
-            copy_to: 'search.titlesAndContributors',
+            copy_to: ['search.titlesAndContributors'],
             type: 'text',
             fields: {
               arabic: {
@@ -590,6 +597,7 @@ export default {
                         analyzer: 'standard',
                       },
                       label: {
+                        copy_to: ['search.textWithSlashes'],
                         type: 'text',
                         fields: {
                           keyword: {
@@ -603,6 +611,7 @@ export default {
                         analyzer: 'asciifolding_analyzer',
                       },
                       path: {
+                        copy_to: ['search.textWithSlashes'],
                         type: 'text',
                         fields: {
                           keyword: {
@@ -627,6 +636,7 @@ export default {
                     type: 'integer',
                   },
                   title: {
+                    copy_to: ['search.textWithSlashes'],
                     type: 'text',
                     fields: {
                       arabic: {
@@ -696,6 +706,9 @@ export default {
   settings: {
     index: {
       analysis: {
+        char_filter: {
+          with_slashes_char_filter,
+        },
         filter: {
           arabic_token_filter: {
             name: 'arabic',
